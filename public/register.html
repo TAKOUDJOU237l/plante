@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription — Pharmacopée Camerounaise</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="recherche.html">Rechercher</a>
+    <a href="carte.html">Carte des tradipraticiens</a>
+  </nav>
+</header>
+
+<div class="form-carte">
+  <h2>Créer un compte</h2>
+  <form id="form-register">
+    <label for="nom">Nom complet</label>
+    <input type="text" id="nom" required>
+
+    <label for="email">Adresse email</label>
+    <input type="email" id="email" required>
+
+    <label for="mot_passe">Mot de passe</label>
+    <div class="champ-mot-passe">
+      <input type="password" id="mot_passe" minlength="6" required>
+      <button type="button" class="bouton-afficher-mdp" data-cible="mot_passe">👁</button>
+    </div>
+
+    <label for="role">Je suis...</label>
+    <select id="role" required>
+      <option value="patient">Patient / Grand public</option>
+      <option value="tradipraticien">Tradipraticien</option>
+      <option value="chercheur">Chercheur / Scientifique</option>
+    </select>
+
+    <div id="bloc-institution" style="display:none;">
+      <label for="institution">Institution de rattachement</label>
+      <input type="text" id="institution">
+    </div>
+
+    <div id="erreur-register" class="message-erreur"></div>
+    <div id="succes-register" class="message-succes"></div>
+
+    <button type="submit" class="submit">Créer mon compte</button>
+  </form>
+  <p class="lien-alt">Déjà inscrit ? <a href="login.html">Se connecter</a></p>
+</div>
+
+<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+</body>
+</html>

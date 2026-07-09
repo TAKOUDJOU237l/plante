@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche plante — Pharmacopée Camerounaise</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="recherche.html">Rechercher</a>
+    <a href="carte.html">Carte des tradipraticiens</a>
+    <div id="nav-auth"></div>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="fiche-plante" id="fiche-plante">
+    <p>Chargement de la fiche...</p>
+  </div>
+
+  <h2 class="section-titre">Remèdes associés</h2>
+  <div id="liste-remedes"></div>
+
+  <h2 class="section-titre">Témoignages des patients</h2>
+  <div id="liste-temoignages"></div>
+
+  <div class="form-carte" style="margin-top:20px;">
+    <h2 style="font-size:1.1rem;">Laisser un témoignage</h2>
+    <div id="alerte-connexion" style="display:none;">
+      <p>Vous devez être <a href="login.html">connecté</a> pour laisser un témoignage.</p>
+    </div>
+    <form id="form-temoignage">
+      <label for="note">Note (1 à 5)</label>
+      <select id="note" required>
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Bon</option>
+        <option value="3">3 - Moyen</option>
+        <option value="2">2 - Faible</option>
+        <option value="1">1 - Inefficace</option>
+      </select>
+      <label for="contenu">Votre expérience</label>
+      <textarea id="contenu" rows="3" required></textarea>
+      <div id="erreur-temoignage" class="message-erreur"></div>
+      <div id="succes-temoignage" class="message-succes"></div>
+      <button type="submit" class="submit">Publier (soumis à modération)</button>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+
+<script src="assets/js/api.js"></script>
+<script>
+const idPlante = new URLSearchParams(window.location.search).get('id');
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!idPlante) {
+    document.getElementById('fiche-plante').innerHTML = '<p>Plante introuvable.</p>';
+    return;
+  }
+
+  try {
+    const data = await api.get(`/plantes/get.php?id=${idPlante}`);
+    const p = data.plante;
+
+    document.getElementById('fiche-plante').innerHTML = `
+      <img src="${p.image_url || 'assets/images/placeholder.jpg'}" alt="${p.nom_local}">
+      <div>
+        <span class="badge">${p.famille_botanique || 'Famille inconnue'}</span>
+        <h2>${p.nom_local}</h2>
+        <p><em>${p.nom_scientifique || ''}</em></p>
+        <p>${p.description || 'Aucune description disponible.'}</p>
+      </div>
+    `;
+
+    const listeRemedes = document.getElementById('liste-remedes');
+    listeRemedes.innerHTML = (data.remedes || []).map(r => `
+      <div class="bloc-remede">
+        <strong>Pour : ${r.nom_maladie}</strong><br>
+        Préparation : ${r.preparation || 'N/A'}<br>
+        Dosage : ${r.dosage || 'N/A'}<br>
+        Précautions : ${r.precautions || 'Aucune connue'}
+      </div>
+    `).join('') || '<p>Aucun remède renseigné pour cette plante.</p>';
+
+    const listeTemoignages = document.getElementById('liste-temoignages');
+    listeTemoignages.innerHTML = (data.temoignages || []).map(t => `
+      <div class="bloc-remede">
+        <strong>${'⭐'.repeat(t.note)}</strong> — ${t.auteur || 'Anonyme'}<br>
+        ${t.contenu}
+      </div>
+    `).join('') || '<p>Aucun témoignage publié pour le moment.</p>';
+
+  } catch (e) {
+    document.getElementById('fiche-plante').innerHTML = '<p>Erreur lors du chargement de la fiche.</p>';
+  }
+
+  // Vérifie l'état de connexion pour le formulaire de témoignage
+  const etat = await api.get('/auth/me.php');
+  if (!etat.connecte) {
+    document.getElementById('alerte-connexion').style.display = 'block';
+    document.getElementById('form-temoignage').style.display = 'none';
+  }
+
+  document.getElementById('form-temoignage').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const note = document.getElementById('note').value;
+    const contenu = document.getElementById('contenu').value.trim();
+    try {
+      await api.post('/temoignages/create.php', { id_plante: idPlante, note, contenu });
+      document.getElementById('succes-temoignage').textContent = 'Merci ! Votre témoignage sera visible après modération.';
+      document.getElementById('succes-temoignage').style.display = 'block';
+      document.getElementById('erreur-temoignage').style.display = 'none';
+      document.getElementById('form-temoignage').reset();
+    } catch (err) {
+      document.getElementById('erreur-temoignage').textContent = err.message;
+      document.getElementById('erreur-temoignage').style.display = 'block';
+    }
+  });
+});
+</script>
+</body>
+</html>

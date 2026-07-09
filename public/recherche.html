@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recherche — Pharmacopée Camerounaise</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="recherche.html">Rechercher</a>
+    <a href="carte.html">Carte des tradipraticiens</a>
+    <div id="nav-auth"></div>
+  </nav>
+</header>
+
+<div class="container">
+  <h2 class="section-titre">Résultats de recherche</h2>
+
+  <form class="barre-recherche" id="form-recherche" style="max-width:100%;">
+    <input type="text" id="champ-recherche" placeholder="Nom de plante, maladie...">
+    <button type="submit">Rechercher</button>
+  </form>
+
+  <div class="filtres">
+    <select id="filtre-ethnie"><option value="">Toutes les ethnies</option></select>
+    <select id="filtre-region"><option value="">Toutes les régions</option></select>
+    <select id="filtre-maladie"><option value="">Toutes les maladies</option></select>
+  </div>
+
+  <div class="grille-plantes" id="grille-resultats">
+    <p>Chargement...</p>
+  </div>
+</div>
+
+<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+
+<button id="chatbot-bulle" class="chatbot-bulle" aria-label="Ouvrir l'assistant">💬</button>
+<div id="chatbot-fenetre" class="chatbot-fenetre">
+  <div class="chatbot-entete">
+    <span>Assistant Pharmacopée</span>
+    <button id="chatbot-fermer" aria-label="Fermer">✕</button>
+  </div>
+  <div id="chatbot-messages" class="chatbot-messages"></div>
+  <form id="chatbot-form" class="chatbot-saisie">
+    <input id="chatbot-input" type="text" placeholder="Tapez votre message..." autocomplete="off">
+    <button type="submit">➤</button>
+  </form>
+</div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chatbot.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const grille = document.getElementById('grille-resultats');
+  const champRecherche = document.getElementById('champ-recherche');
+  const selectEthnie = document.getElementById('filtre-ethnie');
+  const selectRegion = document.getElementById('filtre-region');
+  const selectMaladie = document.getElementById('filtre-maladie');
+
+  // Pré-remplit depuis l'URL (?q=...)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('q')) champRecherche.value = params.get('q');
+
+  // Charge les listes de filtres
+  try {
+    const [ethnies, regions, maladies] = await Promise.all([
+      api.get('/ethnies/list.php'),
+      api.get('/regions/list.php'),
+      api.get('/maladies/list.php'),
+    ]);
+    ethnies.ethnies.forEach(e => selectEthnie.insertAdjacentHTML('beforeend', `<option value="${e.id_ethnie}">${e.nom}</option>`));
+    regions.regions.forEach(r => selectRegion.insertAdjacentHTML('beforeend', `<option value="${r.id_region}">${r.nom}</option>`));
+    maladies.maladies.forEach(m => selectMaladie.insertAdjacentHTML('beforeend', `<option value="${m.id_maladie}">${m.nom}</option>`));
+  } catch (e) { /* filtres facultatifs si l'API n'est pas encore prête */ }
+
+  async function lancerRecherche() {
+    grille.innerHTML = '<p>Recherche en cours...</p>';
+    const qp = new URLSearchParams({
+      q: champRecherche.value,
+      ethnie: selectEthnie.value,
+      region: selectRegion.value,
+      maladie: selectMaladie.value,
+    });
+    try {
+      const data = await api.get('/plantes/list.php?' + qp.toString());
+      grille.innerHTML = data.plantes.map(p => `
+        <a class="carte-plante" href="plante.html?id=${p.id_plante}" style="text-decoration:none;color:inherit;">
+          <img src="${p.image_url || 'assets/images/placeholder.jpg'}" alt="${p.nom_local}">
+          <div class="contenu">
+            <h3>${p.nom_local}</h3>
+            <p>${p.nom_scientifique || ''}</p>
+          </div>
+        </a>
+      `).join('') || '<p>Aucun résultat pour ces critères.</p>';
+    } catch (e) {
+      grille.innerHTML = '<p>Erreur lors de la recherche.</p>';
+    }
+  }
+
+  document.getElementById('form-recherche').addEventListener('submit', (e) => { e.preventDefault(); lancerRecherche(); });
+  [selectEthnie, selectRegion, selectMaladie].forEach(s => s.addEventListener('change', lancerRecherche));
+
+  lancerRecherche();
+});
+</script>
+</body>
+</html>

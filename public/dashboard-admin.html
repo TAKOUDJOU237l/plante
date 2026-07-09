@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon espace — Administrateur</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <div id="nav-auth"></div>
+  </nav>
+</header>
+
+<div class="container">
+  <h2 class="section-titre">Espace Administrateur</h2>
+
+  <div class="dashboard-grille">
+    <div class="dashboard-menu">
+      <a href="#" class="actif" data-onglet="validation">Valider tradipraticiens</a>
+      <a href="#" data-onglet="moderation">Modérer témoignages</a>
+      <a href="#" data-onglet="plantes">Gérer les plantes</a>
+      <a href="#" data-onglet="stats">Statistiques d'usage</a>
+    </div>
+
+    <div class="panneau">
+      <div id="onglet-validation">
+        <h3>Comptes tradipraticiens en attente</h3>
+        <table class="tableau-donnees">
+          <thead><tr><th>Nom</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="corps-validation"><tr><td colspan="3">Chargement...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="onglet-moderation" style="display:none;">
+        <h3>Témoignages en attente de modération</h3>
+        <table class="tableau-donnees">
+          <thead><tr><th>Auteur</th><th>Contenu</th><th>Actions</th></tr></thead>
+          <tbody id="corps-moderation"><tr><td colspan="3">Chargement...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="onglet-plantes" style="display:none;">
+        <h3>Gestion des plantes (CRUD)</h3>
+        <button class="btn btn-valider" id="btn-nouvelle-plante" style="margin-bottom:12px;">+ Ajouter une plante</button>
+        <table class="tableau-donnees">
+          <thead><tr><th>Nom local</th><th>Nom scientifique</th><th>Actions</th></tr></thead>
+          <tbody id="corps-plantes"><tr><td colspan="3">Chargement...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="onglet-stats" style="display:none;">
+        <h3>Statistiques d'usage de la plateforme</h3>
+        <div id="zone-stats">Chargement...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+
+<script src="assets/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.dashboard-menu a').forEach(lien => {
+    lien.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('actif'));
+      lien.classList.add('actif');
+      ['validation', 'moderation', 'plantes', 'stats'].forEach(nom => {
+        document.getElementById('onglet-' + nom).style.display =
+          nom === lien.dataset.onglet ? 'block' : 'none';
+      });
+    });
+  });
+
+  chargerValidation();
+  chargerModeration();
+  chargerPlantes();
+  chargerStats();
+});
+
+async function chargerValidation() {
+  const corps = document.getElementById('corps-validation');
+  try {
+    const data = await api.get('/tradipraticiens/list.php?statut=en_attente');
+    corps.innerHTML = data.tradipraticiens.map(t => `
+      <tr>
+        <td>${t.nom}</td>
+        <td>${t.statut_validation}</td>
+        <td>
+          <button class="btn btn-valider" onclick="validerTradi(${t.id_tradipraticien}, 'valide')">Valider</button>
+          <button class="btn btn-refuser" onclick="validerTradi(${t.id_tradipraticien}, 'refuse')">Refuser</button>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="3">Aucun compte en attente.</td></tr>';
+  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
+}
+
+async function validerTradi(id, statut) {
+  try {
+    await api.put('/tradipraticiens/validate.php', { id_tradipraticien: id, statut_validation: statut });
+    chargerValidation();
+  } catch (e) { alert('Erreur : ' + e.message); }
+}
+
+async function chargerModeration() {
+  const corps = document.getElementById('corps-moderation');
+  try {
+    const data = await api.get('/temoignages/list.php?statut=en_attente');
+    corps.innerHTML = data.temoignages.map(t => `
+      <tr>
+        <td>${t.auteur}</td>
+        <td>${t.contenu}</td>
+        <td>
+          <button class="btn btn-valider" onclick="modererTemoignage(${t.id_temoignage}, 'approuve')">Approuver</button>
+          <button class="btn btn-refuser" onclick="modererTemoignage(${t.id_temoignage}, 'rejete')">Rejeter</button>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="3">Aucun témoignage en attente.</td></tr>';
+  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
+}
+
+async function modererTemoignage(id, statut) {
+  try {
+    await api.put('/temoignages/moderate.php', { id_temoignage: id, statut_moderation: statut });
+    chargerModeration();
+  } catch (e) { alert('Erreur : ' + e.message); }
+}
+
+async function chargerPlantes() {
+  const corps = document.getElementById('corps-plantes');
+  try {
+    const data = await api.get('/plantes/list.php');
+    corps.innerHTML = data.plantes.map(p => `
+      <tr>
+        <td>${p.nom_local}</td>
+        <td>${p.nom_scientifique || ''}</td>
+        <td>
+          <button class="btn btn-secondaire" onclick="location.href='plante.html?id=${p.id_plante}'">Voir</button>
+          <button class="btn btn-refuser" onclick="supprimerPlante(${p.id_plante})">Supprimer</button>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="3">Aucune plante enregistrée.</td></tr>';
+  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
+}
+
+async function supprimerPlante(id) {
+  if (!confirm('Confirmer la suppression de cette plante ?')) return;
+  try {
+    await api.delete('/plantes/delete.php?id=' + id);
+    chargerPlantes();
+  } catch (e) { alert('Erreur : ' + e.message); }
+}
+
+document.getElementById('btn-nouvelle-plante')?.addEventListener('click', async () => {
+  const nom_local = prompt('Nom local de la plante :');
+  if (!nom_local) return;
+  const nom_scientifique = prompt('Nom scientifique (facultatif) :') || '';
+  try {
+    await api.post('/plantes/create.php', { nom_local, nom_scientifique });
+    chargerPlantes();
+  } catch (e) { alert('Erreur : ' + e.message); }
+});
+
+async function chargerStats() {
+  const zone = document.getElementById('zone-stats');
+  try {
+    const data = await api.get('/stats/usage.php');
+    zone.innerHTML = `
+      <ul>
+        <li>Utilisateurs inscrits : <strong>${data.stats.total_utilisateurs}</strong></li>
+        <li>Plantes référencées : <strong>${data.stats.total_plantes}</strong></li>
+        <li>Tradipraticiens validés : <strong>${data.stats.total_tradipraticiens_valides}</strong></li>
+        <li>Témoignages publiés : <strong>${data.stats.total_temoignages_approuves}</strong></li>
+      </ul>
+      <a class="btn btn-secondaire" href="/api/export/csv.php">Exporter les données (CSV)</a>
+    `;
+  } catch (e) { zone.innerHTML = '<p>Erreur de chargement des statistiques.</p>'; }
+}
+</script>
+</body>
+</html>

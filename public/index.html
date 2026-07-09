@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharmacopée Camerounaise — Accueil</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="recherche.html">Rechercher</a>
+    <a href="carte.html">Carte des tradipraticiens</a>
+    <div id="nav-auth"></div>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Trouvez un remède traditionnel camerounais</h1>
+  <p>Décrivez vos symptômes, recherchez une plante, ou localisez un tradipraticien près de chez vous.</p>
+
+  <form class="barre-recherche" action="recherche.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher une plante, une maladie...">
+    <button type="submit">Rechercher</button>
+  </form>
+</section>
+
+<div class="container">
+  <h2 class="section-titre">Plantes en vedette</h2>
+  <div class="grille-plantes" id="grille-plantes-vedette">
+    <p>Chargement des plantes...</p>
+  </div>
+
+  <h2 class="section-titre">Localiser un tradipraticien</h2>
+  <div id="carte-interactive"></div>
+</div>
+
+<footer class="footer">
+  RICTD — Numérique Universitaire — Université de Yaoundé I — 2025-2026
+</footer>
+
+<!-- Chatbot flottant -->
+<button id="chatbot-bulle" class="chatbot-bulle" aria-label="Ouvrir l'assistant">💬</button>
+<div id="chatbot-fenetre" class="chatbot-fenetre">
+  <div class="chatbot-entete">
+    <span>Assistant Pharmacopée</span>
+    <button id="chatbot-fermer" aria-label="Fermer">✕</button>
+  </div>
+  <div id="chatbot-messages" class="chatbot-messages"></div>
+  <form id="chatbot-form" class="chatbot-saisie">
+    <input id="chatbot-input" type="text" placeholder="Tapez votre message..." autocomplete="off">
+    <button type="submit">➤</button>
+  </form>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chatbot.js"></script>
+<script src="assets/js/carte.js"></script>
+<script>
+  // Charge quelques plantes en vedette sur la page d'accueil
+  document.addEventListener('DOMContentLoaded', async () => {
+    const grille = document.getElementById('grille-plantes-vedette');
+    try {
+      const data = await api.get('/plantes/list.php');
+      const plantes = data.plantes.slice(0, 6);
+      grille.innerHTML = plantes.map(p => `
+        <a class="carte-plante" href="plante.html?id=${p.id_plante}" style="text-decoration:none;color:inherit;">
+          <img src="${p.image_url || 'assets/images/placeholder.jpg'}" alt="${p.nom_local}">
+          <div class="contenu">
+            <h3>${p.nom_local}</h3>
+            <p>${p.nom_scientifique || ''}</p>
+          </div>
+        </a>
+      `).join('') || '<p>Aucune plante disponible pour le moment.</p>';
+    } catch (e) {
+      grille.innerHTML = '<p>Impossible de charger les plantes pour le moment.</p>';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon espace — Tradipraticien</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🌿 Pharmacopée Camerounaise</div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <div id="nav-auth"></div>
+  </nav>
+</header>
+
+<div class="container">
+  <h2 class="section-titre">Espace Tradipraticien</h2>
+
+  <div class="dashboard-grille">
+    <div class="dashboard-menu">
+      <a href="#profil" class="actif" data-onglet="profil">Mon profil</a>
+      <a href="#specialites" data-onglet="specialites">Mes spécialités</a>
+      <a href="#avis" data-onglet="avis">Avis reçus</a>
+    </div>
+
+    <div class="panneau">
+      <div id="onglet-profil">
+        <h3>Informations de localisation</h3>
+        <form id="form-profil">
+          <label for="latitude">Latitude</label>
+          <input type="number" step="any" id="latitude">
+          <label for="longitude">Longitude</label>
+          <input type="number" step="any" id="longitude">
+          <label for="disponibilites">Disponibilités</label>
+          <input type="text" id="disponibilites" placeholder="ex : Lun-Ven, 8h-17h">
+          <div id="statut-profil" style="margin:12px 0; font-size:0.9rem;"></div>
+          <button type="submit" class="submit" style="width:auto;padding:10px 20px;">Enregistrer</button>
+        </form>
+      </div>
+
+      <div id="onglet-specialites" style="display:none;">
+        <h3>Spécialités et plantes maîtrisées</h3>
+        <div id="liste-specialites"></div>
+      </div>
+
+      <div id="onglet-avis" style="display:none;">
+        <h3>Avis reçus des patients</h3>
+        <div id="liste-avis"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+
+<script src="assets/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Bascule d'onglets simple
+  document.querySelectorAll('.dashboard-menu a').forEach(lien => {
+    lien.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('actif'));
+      lien.classList.add('actif');
+      ['profil', 'specialites', 'avis'].forEach(nom => {
+        document.getElementById('onglet-' + nom).style.display =
+          nom === lien.dataset.onglet ? 'block' : 'none';
+      });
+    });
+  });
+
+  // Charge le profil actuel
+  try {
+    const data = await api.get('/tradipraticiens/profil.php');
+    document.getElementById('latitude').value = data.profil.latitude || '';
+    document.getElementById('longitude').value = data.profil.longitude || '';
+    document.getElementById('disponibilites').value = data.profil.disponibilites || '';
+    document.getElementById('statut-profil').textContent =
+      'Statut de validation : ' + data.profil.statut_validation;
+  } catch (e) { /* profil pas encore renseigné */ }
+
+  document.getElementById('form-profil').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await api.put('/tradipraticiens/profil.php', {
+        latitude: document.getElementById('latitude').value,
+        longitude: document.getElementById('longitude').value,
+        disponibilites: document.getElementById('disponibilites').value,
+      });
+      alert('Profil mis à jour avec succès.');
+    } catch (err) {
+      alert('Erreur : ' + err.message);
+    }
+  });
+
+  // Avis reçus
+  try {
+    const avis = await api.get('/tradipraticiens/avis.php');
+    document.getElementById('liste-avis').innerHTML = avis.temoignages.map(t => `
+      <div class="bloc-remede">${'⭐'.repeat(t.note)} — ${t.contenu}</div>
+    `).join('') || '<p>Aucun avis pour le moment.</p>';
+  } catch (e) { /* ignore */ }
+});
+</script>
+</body>
+</html>
