@@ -56,11 +56,19 @@ function initChatbot() {
       const data = await api.post('/chatbot/analyse.php', { symptomes: texte });
       chargement.remove();
 
+      if (data.reponse) {
+        ajouterMessage(data.reponse);
+      }
+
       if (data.plantes && data.plantes.length > 0) {
-        ajouterMessage(`Voici ${data.plantes.length} plante(s) traditionnellement utilisée(s) pour ces symptômes :`);
+        if (!data.reponse) {
+          ajouterMessage(`Voici ${data.plantes.length} plante(s) traditionnellement utilisée(s) pour ces symptômes :`);
+        }
         ajouterSuggestionsPlantes(data.plantes);
       } else {
-        ajouterMessage("Je n'ai trouvé aucune plante correspondant à ces symptômes. Essayez de reformuler ou consultez un tradipraticien.");
+        if (!data.reponse) {
+          ajouterMessage("Je n'ai trouvé aucune plante correspondant à ces symptômes. Essayez de reformuler ou consultez un tradipraticien.");
+        }
       }
     } catch (err) {
       chargement.remove();

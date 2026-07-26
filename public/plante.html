@@ -26,6 +26,13 @@
   <h2 class="section-titre">Remèdes associés</h2>
   <div id="liste-remedes"></div>
 
+  <h2 class="section-titre">Usages traditionnels par ethnie</h2>
+  <div id="liste-usages-ethniques"></div>
+  <p style="font-size:0.85rem;color:#777;margin-top:-8px;">
+    Ces informations sont renseignées par des tradipraticiens validés sur la plateforme —
+    <a href="register.html">devenez contributeur</a> si vous êtes tradipraticien.
+  </p>
+
   <h2 class="section-titre">Témoignages des patients</h2>
   <div id="liste-temoignages"></div>
 
@@ -87,6 +94,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         Précautions : ${r.precautions || 'Aucune connue'}
       </div>
     `).join('') || '<p>Aucun remède renseigné pour cette plante.</p>';
+
+    const listeUsages = document.getElementById('liste-usages-ethniques');
+    listeUsages.innerHTML = (data.usages_ethniques || []).map(u => `
+      <div class="bloc-remede">
+        <strong>${u.ethnie}</strong> <span class="badge">${u.region}</span><br>
+        ${u.usage_traditionnel}
+      </div>
+    `).join('') || '<p>Aucun usage ethnique renseigné pour le moment.</p>';
 
     const listeTemoignages = document.getElementById('liste-temoignages');
     listeTemoignages.innerHTML = (data.temoignages || []).map(t => `

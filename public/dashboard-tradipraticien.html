@@ -24,6 +24,7 @@
       <a href="#profil" class="actif" data-onglet="profil">Mon profil</a>
       <a href="#specialites" data-onglet="specialites">Mes spécialités</a>
       <a href="#avis" data-onglet="avis">Avis reçus</a>
+      <a href="#contribuer" data-onglet="contribuer">Contribuer un usage ethnique</a>
     </div>
 
     <div class="panneau">
@@ -50,6 +51,29 @@
         <h3>Avis reçus des patients</h3>
         <div id="liste-avis"></div>
       </div>
+
+      <div id="onglet-contribuer" style="display:none;">
+        <h3>Partager un usage traditionnel par ethnie</h3>
+        <p style="color:#666;font-size:0.9rem;">
+          Ce savoir sera visible publiquement sur la fiche de la plante, avec mention de votre profil validé.
+          Merci de ne partager que des usages que vous connaissez réellement.
+        </p>
+        <form id="form-contribution">
+          <label for="select-plante">Plante concernée</label>
+          <select id="select-plante" required><option value="">Chargement...</option></select>
+
+          <label for="select-ethnie">Ethnie</label>
+          <select id="select-ethnie" required><option value="">Chargement...</option></select>
+
+          <label for="texte-usage">Usage traditionnel</label>
+          <textarea id="texte-usage" rows="3" placeholder="Ex : Utilisé en décoction contre la fièvre, préparé avec..." required></textarea>
+
+          <div id="erreur-contribution" class="message-erreur"></div>
+          <div id="succes-contribution" class="message-succes"></div>
+
+          <button type="submit" class="submit" style="width:auto;padding:10px 20px;margin-top:14px;">Publier la contribution</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -65,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('actif'));
       lien.classList.add('actif');
-      ['profil', 'specialites', 'avis'].forEach(nom => {
+      ['profil', 'specialites', 'avis', 'contribuer'].forEach(nom => {
         document.getElementById('onglet-' + nom).style.display =
           nom === lien.dataset.onglet ? 'block' : 'none';
       });
@@ -103,6 +127,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="bloc-remede">${'⭐'.repeat(t.note)} — ${t.contenu}</div>
     `).join('') || '<p>Aucun avis pour le moment.</p>';
   } catch (e) { /* ignore */ }
+
+  // ---------- Contribution : usage traditionnel par ethnie ----------
+  const selectPlante = document.getElementById('select-plante');
+  const selectEthnie = document.getElementById('select-ethnie');
+
+  try {
+    const [plantesData, ethniesData] = await Promise.all([
+      api.get('/plantes/list.php'),
+      api.get('/ethnies/list.php'),
+    ]);
+    selectPlante.innerHTML = '<option value="">-- Choisir une plante --</option>' +
+      plantesData.plantes.map(p => `<option value="${p.id_plante}">${p.nom_local} (${p.nom_scientifique || ''})</option>`).join('');
+    selectEthnie.innerHTML = '<option value="">-- Choisir une ethnie --</option>' +
+      ethniesData.ethnies.map(e => `<option value="${e.id_ethnie}">${e.nom} (${e.region})</option>`).join('');
+  } catch (e) {
+    selectPlante.innerHTML = '<option value="">Erreur de chargement</option>';
+    selectEthnie.innerHTML = '<option value="">Erreur de chargement</option>';
+  }
+
+  document.getElementById('form-contribution').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('erreur-contribution').style.display = 'none';
+    document.getElementById('succes-contribution').style.display = 'none';
+
+    try {
+      await api.post('/plantes/ethnies.php', {
+        id_plante: selectPlante.value,
+        id_ethnie: selectEthnie.value,
+        usage_traditionnel: document.getElementById('texte-usage').value.trim(),
+      });
+      document.getElementById('succes-contribution').textContent = 'Merci ! Votre contribution est maintenant visible sur la fiche de la plante.';
+      document.getElementById('succes-contribution').style.display = 'block';
+      document.getElementById('form-contribution').reset();
+    } catch (err) {
+      document.getElementById('erreur-contribution').textContent = err.message;
+      document.getElementById('erreur-contribution').style.display = 'block';
+    }
+  });
 });
 </script>
 </body>

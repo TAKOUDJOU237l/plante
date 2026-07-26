@@ -1,0 +1,281 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+  pdftitle={Cahier des charges - Plateforme Numerique de Pharmacopée Traditionnelle Camerounaise},
+  pdfauthor={Projet RICTD - Universite de Yaounde I}
+}
+
+\setstretch{1.15}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Cahier des charges}
+\rhead{Pharmacopée Camerounaise}
+\cfoot{\thepage}
+
+\titleformat{\section}{\large\bfseries\color{blue!50!black}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.7em}{}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large \textbf{Université de Yaoundé I}}\\[0.4cm]
+  {\large RICTD -- Numérique Universitaire}\\[2cm]
+
+  {\Huge \textbf{Cahier des charges}}\\[0.4cm]
+  {\Large Plateforme Numérique de Pharmacopée Traditionnelle Camerounaise}\\[1.4cm]
+
+  \begin{tabular}{>{\bfseries}l l}
+    Projet & Pharmacopée Camerounaise \\
+    Version & 1.0 \\
+    Date & \today \\
+    Auteur(s) & [À compléter] \\
+    Encadreur(s) & [À compléter]
+  \end{tabular}
+
+  \vfill
+  \textit{Document de référence pour le cadrage fonctionnel, technique et organisationnel du projet}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Contexte et justification}
+La médecine traditionnelle occupe une place importante dans les pratiques de santé au Cameroun. Le projet vise à centraliser et valoriser les connaissances liées aux plantes médicinales, tout en proposant une plateforme numérique accessible pour les patients, chercheurs, tradipraticiens et administrateurs.
+
+La plateforme permet notamment :
+\begin{itemize}[leftmargin=1.2cm]
+  \item la consultation de fiches plantes et remèdes ;
+  \item la recherche par mots-clés (plante, maladie, symptôme) ;
+  \item la localisation de tradipraticiens ;
+  \item la gestion des témoignages avec modération ;
+  \item un espace d'administration et un espace tradipraticien.
+\end{itemize}
+
+\section{Objectifs du projet}
+\subsection{Objectif général}
+Concevoir une application web fiable et ergonomique pour diffuser des informations de pharmacopée traditionnelle camerounaise et faciliter l'accès aux ressources de santé traditionnelle.
+
+\subsection{Objectifs spécifiques}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Référencer les plantes médicinales, maladies associées et usages traditionnels.
+  \item Mettre à disposition une recherche simple et rapide.
+  \item Offrir une cartographie des tradipraticiens validés.
+  \item Assurer un contrôle qualité via validation des profils et modération des témoignages.
+  \item Produire des statistiques d'usage et un export CSV pour exploitation.
+\end{itemize}
+
+\section{Périmètre}
+\subsection{Inclus dans le périmètre}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Frontend web (HTML/CSS/JS) : accueil, recherche, fiches plantes, carte, authentification, tableaux de bord.
+  \item API backend PHP organisée par ressources (\texttt{/api/auth}, \texttt{/api/plantes}, \texttt{/api/tradipraticiens}, etc.).
+  \item Base de données MySQL/MariaDB (schéma relationnel complet).
+  \item Gestion des rôles : patient, tradipraticien, chercheur, administrateur.
+\end{itemize}
+
+\subsection{Hors périmètre (version actuelle)}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Application mobile native.
+  \item Téléconsultation en temps réel.
+  \item Intégration avec un SI hospitalier externe.
+\end{itemize}
+
+\section{Parties prenantes et utilisateurs}
+\begin{longtable}{p{3.5cm}p{11cm}}
+\toprule
+\textbf{Acteur} & \textbf{Responsabilités / Besoins} \\
+\midrule
+Patient & Consulter les plantes/remèdes, rechercher des solutions, laisser des témoignages. \\
+Tradipraticien & Gérer son profil (géolocalisation, disponibilités), présenter ses spécialités, recevoir des avis. \\
+Chercheur & Exploiter les données documentées (plantes, ethnies, maladies). \\
+Administrateur & Valider les comptes tradipraticiens, modérer les témoignages, gérer les plantes, suivre les statistiques. \\
+Équipe projet & Développer, maintenir, sécuriser et faire évoluer la plateforme. \\
+\bottomrule
+\end{longtable}
+
+\section{Exigences fonctionnelles}
+\subsection{Gestion des comptes et authentification}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Inscription et connexion utilisateur.
+  \item Gestion des rôles et contrôle d'accès par profil.
+  \item Consultation de session active (\texttt{/api/auth/me.php}) et déconnexion.
+\end{itemize}
+
+\subsection{Gestion des plantes et remèdes}
+\begin{itemize}[leftmargin=1.2cm]
+  \item CRUD des plantes (création, lecture, mise à jour, suppression).
+  \item Association des plantes aux maladies (remèdes, dosage, précautions).
+  \item Affichage des fiches détaillées avec image et description.
+\end{itemize}
+
+\subsection{Recherche et assistance}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Recherche textuelle par nom de plante, maladie ou mots associés.
+  \item Assistant conversationnel pour guider l'utilisateur (\texttt{/api/chatbot/analyse.php}).
+\end{itemize}
+
+\subsection{Tradipraticiens et géolocalisation}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Création/mise à jour du profil tradipraticien.
+  \item Système de validation administrative (en attente, validé, refusé).
+  \item Carte interactive des tradipraticiens validés.
+\end{itemize}
+
+\subsection{Témoignages et modération}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Soumission de témoignages et notes.
+  \item Modération des témoignages avant publication.
+\end{itemize}
+
+\subsection{Administration et pilotage}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Tableau de bord administrateur.
+  \item Statistiques globales : utilisateurs, plantes, tradipraticiens validés, témoignages approuvés.
+  \item Export des données en CSV.
+\end{itemize}
+
+\section{Exigences non fonctionnelles}
+\begin{itemize}[leftmargin=1.2cm]
+  \item \textbf{Performance} : réponse API fluide pour les cas d'usage courants.
+  \item \textbf{Sécurité} : mots de passe hachés, contrôle d'accès par rôle, validation des entrées.
+  \item \textbf{Disponibilité} : exécution locale robuste sous XAMPP (Apache + MySQL).
+  \item \textbf{Maintenabilité} : architecture claire (\texttt{public/}, \texttt{api/}, \texttt{includes/}, \texttt{database/}).
+  \item \textbf{Ergonomie} : interface web simple, lisible et responsive.
+  \item \textbf{Compatibilité} : navigateurs web modernes.
+\end{itemize}
+
+\section{Architecture technique}
+\subsection{Stack technologique}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Frontend : HTML5, CSS3, JavaScript vanilla.
+  \item Backend : PHP (API REST).
+  \item Base de données : MySQL / MariaDB.
+  \item Cartographie : Leaflet + OpenStreetMap.
+  \item Environnement local : XAMPP.
+\end{itemize}
+
+\subsection{Organisation des composants}
+\begin{longtable}{p{3.5cm}p{11cm}}
+\toprule
+\textbf{Dossier} & \textbf{Description} \\
+\midrule
+\texttt{public/} & Interfaces utilisateur (pages HTML, CSS, JS, images). \\
+\texttt{api/} & Endpoints backend par domaine fonctionnel. \\
+\texttt{includes/} & Fonctions communes, connexion BDD, vérification d'authentification. \\
+\texttt{database/} & Schéma SQL et données de démonstration. \\
+\bottomrule
+\end{longtable}
+
+\section{Modèle de données (synthèse)}
+Entités principales :
+\begin{itemize}[leftmargin=1.2cm]
+  \item \texttt{UTILISATEUR}
+  \item \texttt{TRADIPRATICIEN}, \texttt{CHERCHEUR}
+  \item \texttt{PLANTE}, \texttt{MALADIE}, \texttt{REMEDE}
+  \item \texttt{ETHNIE}, \texttt{REGION}, \texttt{PLANTE\_ETHNIE}
+  \item \texttt{TEMOIGNAGE}, \texttt{SPECIALITE}, \texttt{TRADIPRATICIEN\_SPECIALITE}
+\end{itemize}
+
+Le schéma relationnel est fourni dans \texttt{database/schema.sql}.
+
+\section{Règles de gestion clés}
+\begin{enumerate}[leftmargin=1.2cm]
+  \item Un tradipraticien ne peut être visible sur la carte que s'il est validé.
+  \item Un témoignage n'est affiché publiquement qu'après approbation.
+  \item Les mots de passe ne sont jamais stockés en clair.
+  \item Chaque compte utilisateur possède un rôle définissant ses droits.
+  \item Les relations plantes-maladies sont documentées avec préparation, dosage et précautions.
+\end{enumerate}
+
+\section{Contraintes et hypothèses}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Hébergement local initial sous XAMPP.
+  \item Connexion BDD paramétrée dans \texttt{includes/db.php}.
+  \item Langue principale de l'application : français.
+  \item Les données de démonstration sont présentes pour accélérer les tests.
+\end{itemize}
+
+\section{Livrables attendus}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Code source complet du projet.
+  \item Base de données (script SQL).
+  \item Documentation technique et utilisateur.
+  \item Cahier des charges validé (présent document).
+\end{itemize}
+
+\section{Recette et critères d'acceptation}
+\subsection{Exemples de scénarios de recette}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Un utilisateur s'inscrit, se connecte et accède à son espace selon son rôle.
+  \item L'administrateur valide un tradipraticien, qui devient visible sur la carte.
+  \item L'administrateur modère un témoignage, qui apparaît ensuite dans la plateforme.
+  \item Le module de recherche retourne des plantes pertinentes.
+  \item Le tableau de bord admin affiche les statistiques et permet l'export CSV.
+\end{itemize}
+
+\subsection{Conditions de validation}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Fonctionnalités critiques exécutables sans erreur bloquante.
+  \item Données cohérentes en base après opérations CRUD.
+  \item Respect des droits d'accès selon les rôles.
+\end{itemize}
+
+\section{Planning prévisionnel}
+\begin{longtable}{p{2.8cm}p{11.7cm}}
+\toprule
+\textbf{Phase} & \textbf{Contenu} \\
+\midrule
+Cadrage & Analyse des besoins, définition des acteurs et du périmètre. \\
+Conception & Modélisation de la base et architecture applicative. \\
+Développement & Implémentation frontend, API backend et intégration BDD. \\
+Tests/Recette & Vérification fonctionnelle, correction des anomalies. \\
+Déploiement & Mise en production ou packaging de livraison. \\
+\bottomrule
+\end{longtable}
+
+\section{Risques et mesures de mitigation}
+\begin{longtable}{p{5cm}p{9.5cm}}
+\toprule
+\textbf{Risque} & \textbf{Mesure proposée} \\
+\midrule
+Qualité des données collectées & Mettre en place des validations et une modération stricte. \\
+Accès non autorisé & Renforcer contrôle d'accès, sessions et vérifications serveur. \\
+Montée en charge future & Prévoir optimisation SQL, indexation, pagination et cache léger. \\
+Évolution des besoins & Documenter les changements et versionner les livrables. \\
+\bottomrule
+\end{longtable}
+
+\section{Conclusion}
+Ce cahier des charges formalise les exigences essentielles de la Plateforme Numérique de Pharmacopée Traditionnelle Camerounaise. Il sert de référence commune pour le développement, la validation et l'évolution du projet.
+
+\vspace{0.8cm}
+\textbf{Validation :}
+\begin{itemize}[leftmargin=1.2cm]
+  \item Responsable projet : \dotfill
+  \item Encadreur : \dotfill
+  \item Date : \dotfill
+\end{itemize}
+
+\end{document}

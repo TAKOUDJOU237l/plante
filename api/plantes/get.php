@@ -39,9 +39,10 @@ $temoignages = $stmt->fetchAll();
 
 // Usages traditionnels par ethnie
 $stmt = $pdo->prepare(
-    'SELECT e.nom AS ethnie, pe.usage_traditionnel
+    'SELECT e.nom AS ethnie, r.nom AS region, pe.usage_traditionnel
      FROM PLANTE_ETHNIE pe
      JOIN ETHNIE e ON e.id_ethnie = pe.id_ethnie
+     JOIN REGION r ON r.id_region = e.id_region
      WHERE pe.id_plante = ?'
 );
 $stmt->execute([$id]);

@@ -11,6 +11,31 @@ Projet RICTD — Université de Yaoundé I — 2025-2026
 4. Vérifier les identifiants de connexion dans `includes/db.php` (par défaut : `root` sans mot de passe, standard XAMPP).
 5. Ouvrir le site : `http://localhost/pharmacopee-platform/public/index.html`
 
+## Configuration du chatbot LLM (Groq)
+
+Le chatbot utilise la variable d'environnement serveur `GROQ_API_KEY`.
+
+### Sous Windows / XAMPP (Apache)
+
+1. Ouvrir le fichier de configuration Apache (ex: `C:\xampp\apache\conf\httpd.conf`).
+2. Ajouter une variable d'environnement, par exemple :
+
+   ```apache
+   SetEnv GROQ_API_KEY "votre_cle_api_groq"
+   ```
+
+   Optionnel pour changer de modèle :
+
+   ```apache
+   SetEnv GROQ_MODEL "llama-3.1-8b-instant"
+   ```
+
+3. Redémarrer Apache depuis XAMPP Control Panel.
+
+Notes :
+- La clé API reste côté serveur (jamais exposée dans le frontend).
+- Si `GROQ_API_KEY` est absente, le chatbot fonctionne en mode local (règles + base de données).
+
 ## Structure du projet
 
 ```
