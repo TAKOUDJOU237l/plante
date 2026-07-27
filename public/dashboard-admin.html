@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon espace — Administrateur</title>
+<title>Espace Administrateur — Pharmacopée Camerounaise</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -12,176 +12,263 @@
   <div class="logo">🌿 Pharmacopée Camerounaise</div>
   <nav>
     <a href="index.html">Accueil</a>
+    <a href="recherche.html">Catalogue & Recherche</a>
+    <a href="carte.html">Carte</a>
     <div id="nav-auth"></div>
   </nav>
 </header>
 
 <div class="container">
-  <h2 class="section-titre">Espace Administrateur</h2>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h2 class="section-titre" style="margin-bottom: 0;">Tableau de Bord Administrateur</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Gestion du catalogue, validation des comptes et modération des contenus.</p>
+    </div>
+    <a href="../api/export/csv.php" class="primaire" style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary-700); color: white; padding: 10px 20px; border-radius: var(--radius-full); font-weight: 600; font-family: var(--font-heading); box-shadow: var(--shadow-sm);">
+      📥 Exporter la Base en CSV
+    </a>
+  </div>
 
-  <div class="dashboard-grille">
-    <div class="dashboard-menu">
-      <a href="#" class="actif" data-onglet="validation">Valider tradipraticiens</a>
-      <a href="#" data-onglet="moderation">Modérer témoignages</a>
-      <a href="#" data-onglet="plantes">Gérer les plantes</a>
-      <a href="#" data-onglet="stats">Statistiques d'usage</a>
+  <!-- Grille du Dashboard -->
+  <div style="display: grid; grid-template-columns: 240px 1fr; gap: 28px;">
+    <!-- Sidebar Menu -->
+    <div style="background: var(--bg-surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); height: fit-content;">
+      <nav style="display: flex; flex-direction: column; gap: 6px;" id="dashboard-menu">
+        <button class="menu-btn active" data-onglet="validation" style="text-align: left; background: var(--primary-50); color: var(--primary-900); border: none; padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; font-family: var(--font-heading);">
+          👨‍⚕️ Tradipraticiens (<span id="cnt-validation">0</span>)
+        </button>
+        <button class="menu-btn" data-onglet="moderation" style="text-align: left; background: transparent; color: var(--text-muted); border: none; padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; font-family: var(--font-heading);">
+          💬 Témoignages (<span id="cnt-moderation">0</span>)
+        </button>
+        <button class="menu-btn" data-onglet="plantes" style="text-align: left; background: transparent; color: var(--text-muted); border: none; padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; font-family: var(--font-heading);">
+          🌱 Gestion des Plantes
+        </button>
+        <button class="menu-btn" data-onglet="stats" style="text-align: left; background: transparent; color: var(--text-muted); border: none; padding: 12px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; font-family: var(--font-heading);">
+          📊 Statistiques Globale
+        </button>
+      </nav>
     </div>
 
-    <div class="panneau">
+    <!-- Contenu des Onglets -->
+    <div style="background: var(--bg-surface); padding: 28px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+      
+      <!-- Onglet Validation Tradipraticiens -->
       <div id="onglet-validation">
-        <h3>Comptes tradipraticiens en attente</h3>
-        <table class="tableau-donnees">
-          <thead><tr><th>Nom</th><th>Statut</th><th>Actions</th></tr></thead>
-          <tbody id="corps-validation"><tr><td colspan="3">Chargement...</td></tr></tbody>
-        </table>
+        <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-bottom: 16px;">Comptes Tradipraticiens en Attente d'Agrément</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                <th style="padding: 12px;">Praticien</th>
+                <th style="padding: 12px;">Ville / Région</th>
+                <th style="padding: 12px;">Téléphone / Agrément</th>
+                <th style="padding: 12px; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="corps-validation">
+              <tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--text-muted);">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      <!-- Onglet Modération Témoignages -->
       <div id="onglet-moderation" style="display:none;">
-        <h3>Témoignages en attente de modération</h3>
-        <table class="tableau-donnees">
-          <thead><tr><th>Auteur</th><th>Contenu</th><th>Actions</th></tr></thead>
-          <tbody id="corps-moderation"><tr><td colspan="3">Chargement...</td></tr></tbody>
-        </table>
+        <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-bottom: 16px;">Témoignages des Patients en Attente de Modération</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                <th style="padding: 12px;">Auteur & Note</th>
+                <th style="padding: 12px;">Contenu</th>
+                <th style="padding: 12px; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="corps-moderation">
+              <tr><td colspan="3" style="padding: 20px; text-align: center; color: var(--text-muted);">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      <!-- Onglet Gestion des Plantes -->
       <div id="onglet-plantes" style="display:none;">
-        <h3>Gestion des plantes (CRUD)</h3>
-        <button class="btn btn-valider" id="btn-nouvelle-plante" style="margin-bottom:12px;">+ Ajouter une plante</button>
-        <table class="tableau-donnees">
-          <thead><tr><th>Nom local</th><th>Nom scientifique</th><th>Actions</th></tr></thead>
-          <tbody id="corps-plantes"><tr><td colspan="3">Chargement...</td></tr></tbody>
-        </table>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.25rem; color: var(--primary-900);">Catalogue des Plantes Médicinales</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                <th style="padding: 12px;">Nom local</th>
+                <th style="padding: 12px;">Nom scientifique</th>
+                <th style="padding: 12px;">Famille</th>
+              </tr>
+            </thead>
+            <tbody id="corps-plantes">
+              <tr><td colspan="3" style="padding: 20px; text-align: center; color: var(--text-muted);">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      <!-- Onglet Statistiques -->
       <div id="onglet-stats" style="display:none;">
-        <h3>Statistiques d'usage de la plateforme</h3>
-        <div id="zone-stats">Chargement...</div>
+        <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-bottom: 20px;">Statistiques d'Usage de la Plateforme</h3>
+        <div id="zone-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          Chargement...
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 
-<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+<footer class="footer">
+  <p><strong>Plateforme Numérique de Pharmacopée Traditionnelle Camerounaise</strong></p>
+  <p style="margin-top: 4px; opacity: 0.8; font-size: 0.85rem;">RICTD — Numérique Universitaire | Université de Yaoundé I (IMPM / CRPMT)</p>
+</footer>
 
 <script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.dashboard-menu a').forEach(lien => {
-    lien.addEventListener('click', (e) => {
+document.addEventListener('DOMContentLoaded', async () => {
+  const utilisateur = await requireRole(['administrateur']);
+  if (!utilisateur) return;
+
+  // Gestion des onglets
+  const btns = document.querySelectorAll('#dashboard-menu .menu-btn');
+  const onglets = ['validation', 'moderation', 'plantes', 'stats'];
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
       e.preventDefault();
-      document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('actif'));
-      lien.classList.add('actif');
-      ['validation', 'moderation', 'plantes', 'stats'].forEach(nom => {
-        document.getElementById('onglet-' + nom).style.display =
-          nom === lien.dataset.onglet ? 'block' : 'none';
+      const cible = btn.dataset.onglet;
+      btns.forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = 'var(--text-muted)';
+        b.style.fontWeight = '600';
+      });
+      btn.style.background = 'var(--primary-50)';
+      btn.style.color = 'var(--primary-900)';
+      btn.style.fontWeight = '700';
+
+      onglets.forEach(o => {
+        document.getElementById('onglet-' + o).style.display = (o === cible) ? 'block' : 'none';
       });
     });
   });
+
+  // 1. Chargement Tradipraticiens en attente
+  async function chargerValidation() {
+    const tbody = document.getElementById('corps-validation');
+    try {
+      const data = await api.get('/tradipraticiens/list.php?statut=en_attente');
+      const tradis = data.tradipraticiens || [];
+      document.getElementById('cnt-validation').textContent = tradis.length;
+
+      if (tradis.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--text-muted);">Aucun tradipraticien en attente de validation.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = tradis.map(t => `
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px;"><strong>${t.nom}</strong><br><small style="color: var(--primary-700);">${t.titre || 'Tradi-praticien'}</small></td>
+          <td style="padding: 12px;">${t.ville || 'Cameroun'}<br><small style="color: var(--text-light);">${t.adresse || ''}</small></td>
+          <td style="padding: 12px;">${t.telephone || 'N/A'}<br><small style="color: var(--text-light);">${t.numero_accreditation || 'En attente'}</small></td>
+          <td style="padding: 12px; text-align: right;">
+            <button onclick="validerTradi(${t.id_tradipraticien}, 'valide')" style="background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; margin-right: 4px;">Accepter</button>
+            <button onclick="validerTradi(${t.id_tradipraticien}, 'refuse')" style="background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;">Refuser</button>
+          </td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--danger);">Erreur lors du chargement.</td></tr>';
+    }
+  }
+
+  window.validerTradi = async (id, statut) => {
+    try {
+      await api.post('/tradipraticiens/validate.php', { id_tradipraticien: id, statut });
+      chargerValidation();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // 2. Témoignages en attente
+  async function chargerModeration() {
+    const tbody = document.getElementById('corps-moderation');
+    try {
+      const data = await api.get('/temoignages/list.php?statut=en_attente');
+      const temoignages = data.temoignages || [];
+      document.getElementById('cnt-moderation').textContent = temoignages.length;
+
+      if (temoignages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="padding: 20px; text-align: center; color: var(--text-muted);">Aucun témoignage en attente de modération.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = temoignages.map(t => `
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px;"><strong>${t.auteur || 'Anonyme'}</strong><br><span style="color: #f59e0b;">${'⭐'.repeat(t.note)}</span></td>
+          <td style="padding: 12px; font-size: 0.9rem;">"${t.contenu}"<br><small style="color: var(--primary-700);">Plante : ${t.plante_nom}</small></td>
+          <td style="padding: 12px; text-align: right;">
+            <button onclick="moderer(${t.id_temoignage}, 'approuve')" style="background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; margin-right: 4px;">Approuver</button>
+            <button onclick="moderer(${t.id_temoignage}, 'rejete')" style="background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;">Rejeter</button>
+          </td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="3" style="padding: 20px; text-align: center; color: var(--danger);">Erreur lors du chargement.</td></tr>';
+    }
+  }
+
+  window.moderer = async (id, statut) => {
+    try {
+      await api.post('/temoignages/moderate.php', { id_temoignage: id, statut });
+      chargerModeration();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // 3. Liste des plantes
+  async function chargerPlantes() {
+    const tbody = document.getElementById('corps-plantes');
+    try {
+      const data = await api.get('/plantes/list.php');
+      tbody.innerHTML = (data.plantes || []).map(p => `
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px;"><strong>${p.nom_local}</strong></td>
+          <td style="padding: 12px; font-style: italic;">${p.nom_scientifique || ''}</td>
+          <td style="padding: 12px;"><span class="famille-badge">${p.famille_botanique || ''}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {}
+  }
+
+  // 4. Stats
+  async function chargerStats() {
+    const div = document.getElementById('zone-stats');
+    try {
+      const data = await api.get('/stats/usage.php');
+      const s = data.stats || {};
+      div.innerHTML = `
+        <div class="stat-card"><div class="stat-info"><div class="stat-value">${s.total_utilisateurs || 0}</div><div class="stat-label">Utilisateurs Inscrits</div></div></div>
+        <div class="stat-card"><div class="stat-info"><div class="stat-value">${s.total_plantes || 0}</div><div class="stat-label">Plantes au Catalogue</div></div></div>
+        <div class="stat-card"><div class="stat-info"><div class="stat-value">${s.total_tradipraticiens_valides || 0}</div><div class="stat-label">Tradipraticiens Validés</div></div></div>
+        <div class="stat-card"><div class="stat-info"><div class="stat-value">${s.total_temoignages_approuves || 0}</div><div class="stat-label">Témoignages Approuvés</div></div></div>
+      `;
+    } catch (e) {}
+  }
 
   chargerValidation();
   chargerModeration();
   chargerPlantes();
   chargerStats();
 });
-
-async function chargerValidation() {
-  const corps = document.getElementById('corps-validation');
-  try {
-    const data = await api.get('/tradipraticiens/list.php?statut=en_attente');
-    corps.innerHTML = data.tradipraticiens.map(t => `
-      <tr>
-        <td>${t.nom}</td>
-        <td>${t.statut_validation}</td>
-        <td>
-          <button class="btn btn-valider" onclick="validerTradi(${t.id_tradipraticien}, 'valide')">Valider</button>
-          <button class="btn btn-refuser" onclick="validerTradi(${t.id_tradipraticien}, 'refuse')">Refuser</button>
-        </td>
-      </tr>
-    `).join('') || '<tr><td colspan="3">Aucun compte en attente.</td></tr>';
-  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
-}
-
-async function validerTradi(id, statut) {
-  try {
-    await api.put('/tradipraticiens/validate.php', { id_tradipraticien: id, statut_validation: statut });
-    chargerValidation();
-  } catch (e) { alert('Erreur : ' + e.message); }
-}
-
-async function chargerModeration() {
-  const corps = document.getElementById('corps-moderation');
-  try {
-    const data = await api.get('/temoignages/list.php?statut=en_attente');
-    corps.innerHTML = data.temoignages.map(t => `
-      <tr>
-        <td>${t.auteur}</td>
-        <td>${t.contenu}</td>
-        <td>
-          <button class="btn btn-valider" onclick="modererTemoignage(${t.id_temoignage}, 'approuve')">Approuver</button>
-          <button class="btn btn-refuser" onclick="modererTemoignage(${t.id_temoignage}, 'rejete')">Rejeter</button>
-        </td>
-      </tr>
-    `).join('') || '<tr><td colspan="3">Aucun témoignage en attente.</td></tr>';
-  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
-}
-
-async function modererTemoignage(id, statut) {
-  try {
-    await api.put('/temoignages/moderate.php', { id_temoignage: id, statut_moderation: statut });
-    chargerModeration();
-  } catch (e) { alert('Erreur : ' + e.message); }
-}
-
-async function chargerPlantes() {
-  const corps = document.getElementById('corps-plantes');
-  try {
-    const data = await api.get('/plantes/list.php');
-    corps.innerHTML = data.plantes.map(p => `
-      <tr>
-        <td>${p.nom_local}</td>
-        <td>${p.nom_scientifique || ''}</td>
-        <td>
-          <button class="btn btn-secondaire" onclick="location.href='plante.html?id=${p.id_plante}'">Voir</button>
-          <button class="btn btn-refuser" onclick="supprimerPlante(${p.id_plante})">Supprimer</button>
-        </td>
-      </tr>
-    `).join('') || '<tr><td colspan="3">Aucune plante enregistrée.</td></tr>';
-  } catch (e) { corps.innerHTML = '<tr><td colspan="3">Erreur de chargement.</td></tr>'; }
-}
-
-async function supprimerPlante(id) {
-  if (!confirm('Confirmer la suppression de cette plante ?')) return;
-  try {
-    await api.delete('/plantes/delete.php?id=' + id);
-    chargerPlantes();
-  } catch (e) { alert('Erreur : ' + e.message); }
-}
-
-document.getElementById('btn-nouvelle-plante')?.addEventListener('click', async () => {
-  const nom_local = prompt('Nom local de la plante :');
-  if (!nom_local) return;
-  const nom_scientifique = prompt('Nom scientifique (facultatif) :') || '';
-  try {
-    await api.post('/plantes/create.php', { nom_local, nom_scientifique });
-    chargerPlantes();
-  } catch (e) { alert('Erreur : ' + e.message); }
-});
-
-async function chargerStats() {
-  const zone = document.getElementById('zone-stats');
-  try {
-    const data = await api.get('/stats/usage.php');
-    zone.innerHTML = `
-      <ul>
-        <li>Utilisateurs inscrits : <strong>${data.stats.total_utilisateurs}</strong></li>
-        <li>Plantes référencées : <strong>${data.stats.total_plantes}</strong></li>
-        <li>Tradipraticiens validés : <strong>${data.stats.total_tradipraticiens_valides}</strong></li>
-        <li>Témoignages publiés : <strong>${data.stats.total_temoignages_approuves}</strong></li>
-      </ul>
-      <a class="btn btn-secondaire" href="/api/export/csv.php">Exporter les données (CSV)</a>
-    `;
-  } catch (e) { zone.innerHTML = '<p>Erreur de chargement des statistiques.</p>'; }
-}
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon espace — Tradipraticien</title>
+<title>Espace Tradipraticien — Pharmacopée Camerounaise</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -12,157 +12,139 @@
   <div class="logo">🌿 Pharmacopée Camerounaise</div>
   <nav>
     <a href="index.html">Accueil</a>
+    <a href="carte.html">Carte</a>
     <div id="nav-auth"></div>
   </nav>
 </header>
 
 <div class="container">
   <h2 class="section-titre">Espace Tradipraticien</h2>
+  <p style="color: var(--text-muted); margin-bottom: 24px;">Gérez votre profil public, votre géolocalisation et vos agréments professionnels.</p>
 
-  <div class="dashboard-grille">
-    <div class="dashboard-menu">
-      <a href="#profil" class="actif" data-onglet="profil">Mon profil</a>
-      <a href="#specialites" data-onglet="specialites">Mes spécialités</a>
-      <a href="#avis" data-onglet="avis">Avis reçus</a>
-      <a href="#contribuer" data-onglet="contribuer">Contribuer un usage ethnique</a>
-    </div>
+  <div style="background: var(--bg-surface); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); max-width: 800px;">
+    <h3 style="font-size: 1.25rem; color: var(--primary-900); margin-bottom: 20px;">Informations du Profil & Géolocalisation</h3>
 
-    <div class="panneau">
-      <div id="onglet-profil">
-        <h3>Informations de localisation</h3>
-        <form id="form-profil">
-          <label for="latitude">Latitude</label>
-          <input type="number" step="any" id="latitude">
-          <label for="longitude">Longitude</label>
-          <input type="number" step="any" id="longitude">
-          <label for="disponibilites">Disponibilités</label>
-          <input type="text" id="disponibilites" placeholder="ex : Lun-Ven, 8h-17h">
-          <div id="statut-profil" style="margin:12px 0; font-size:0.9rem;"></div>
-          <button type="submit" class="submit" style="width:auto;padding:10px 20px;">Enregistrer</button>
-        </form>
+    <form id="form-profil" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Titre professionnel</label>
+          <input type="text" id="titre" placeholder="ex : Dr. Phytothérapeute agréé" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Numéro d'accréditation MINSANTE / ANTRASA</label>
+          <input type="text" id="numero_accreditation" placeholder="ex : AUT-MINSANTE-2024-001/ANTRASA" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
       </div>
 
-      <div id="onglet-specialites" style="display:none;">
-        <h3>Spécialités et plantes maîtrisées</h3>
-        <div id="liste-specialites"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Téléphone direct</label>
+          <input type="text" id="telephone" placeholder="ex : +237 677 12 34 56" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Années d'expérience</label>
+          <input type="number" id="annees_experience" placeholder="ex : 20" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
       </div>
 
-      <div id="onglet-avis" style="display:none;">
-        <h3>Avis reçus des patients</h3>
-        <div id="liste-avis"></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Ville</label>
+          <input type="text" id="ville" placeholder="ex : Yaoundé, Douala..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Adresse / Quartier</label>
+          <input type="text" id="adresse" placeholder="ex : Quartier Etoudi, face Stade" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
       </div>
 
-      <div id="onglet-contribuer" style="display:none;">
-        <h3>Partager un usage traditionnel par ethnie</h3>
-        <p style="color:#666;font-size:0.9rem;">
-          Ce savoir sera visible publiquement sur la fiche de la plante, avec mention de votre profil validé.
-          Merci de ne partager que des usages que vous connaissez réellement.
-        </p>
-        <form id="form-contribution">
-          <label for="select-plante">Plante concernée</label>
-          <select id="select-plante" required><option value="">Chargement...</option></select>
-
-          <label for="select-ethnie">Ethnie</label>
-          <select id="select-ethnie" required><option value="">Chargement...</option></select>
-
-          <label for="texte-usage">Usage traditionnel</label>
-          <textarea id="texte-usage" rows="3" placeholder="Ex : Utilisé en décoction contre la fièvre, préparé avec..." required></textarea>
-
-          <div id="erreur-contribution" class="message-erreur"></div>
-          <div id="succes-contribution" class="message-succes"></div>
-
-          <button type="submit" class="submit" style="width:auto;padding:10px 20px;margin-top:14px;">Publier la contribution</button>
-        </form>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Latitude GPS</label>
+          <input type="number" step="any" id="latitude" placeholder="ex : 3.8480" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Longitude GPS</label>
+          <input type="number" step="any" id="longitude" placeholder="ex : 11.5021" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+        </div>
       </div>
-    </div>
+
+      <div>
+        <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Disponibilités & Horaires</label>
+        <input type="text" id="disponibilites" placeholder="ex : Lun - Sam: 08h00 - 17h00" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+      </div>
+
+      <div>
+        <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Biographie / Présentation</label>
+        <textarea id="biographie" rows="4" placeholder="Présentez votre savoir ancestral, les plantes que vous utilisez et vos méthodes..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; font-family: var(--font-body);"></textarea>
+      </div>
+
+      <div id="statut-profil" style="display:none; padding: 10px; border-radius: 6px; font-size: 0.9rem;"></div>
+
+      <button type="submit" style="align-self: flex-start; background: var(--primary-700); color: white; border: none; padding: 12px 28px; border-radius: var(--radius-full); font-family: var(--font-heading); font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm);">
+        💾 Enregistrer les modifications
+      </button>
+    </form>
   </div>
 </div>
 
-<footer class="footer">RICTD — Numérique Universitaire — 2025-2026</footer>
+<footer class="footer">
+  <p><strong>Plateforme Numérique de Pharmacopée Traditionnelle Camerounaise</strong></p>
+  <p style="margin-top: 4px; opacity: 0.8; font-size: 0.85rem;">RICTD — Numérique Universitaire | Université de Yaoundé I (IMPM / CRPMT)</p>
+</footer>
 
 <script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  // Bascule d'onglets simple
-  document.querySelectorAll('.dashboard-menu a').forEach(lien => {
-    lien.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('actif'));
-      lien.classList.add('actif');
-      ['profil', 'specialites', 'avis', 'contribuer'].forEach(nom => {
-        document.getElementById('onglet-' + nom).style.display =
-          nom === lien.dataset.onglet ? 'block' : 'none';
-      });
-    });
-  });
+  const utilisateur = await requireRole(['tradipraticien']);
+  if (!utilisateur) return;
 
-  // Charge le profil actuel
+  // Charge le profil
   try {
     const data = await api.get('/tradipraticiens/profil.php');
-    document.getElementById('latitude').value = data.profil.latitude || '';
-    document.getElementById('longitude').value = data.profil.longitude || '';
-    document.getElementById('disponibilites').value = data.profil.disponibilites || '';
-    document.getElementById('statut-profil').textContent =
-      'Statut de validation : ' + data.profil.statut_validation;
-  } catch (e) { /* profil pas encore renseigné */ }
+    if (data.profil) {
+      const p = data.profil;
+      document.getElementById('titre').value = p.titre || '';
+      document.getElementById('numero_accreditation').value = p.numero_accreditation || '';
+      document.getElementById('telephone').value = p.telephone || '';
+      document.getElementById('annees_experience').value = p.annees_experience || '';
+      document.getElementById('ville').value = p.ville || '';
+      document.getElementById('adresse').value = p.adresse || '';
+      document.getElementById('latitude').value = p.latitude || '';
+      document.getElementById('longitude').value = p.longitude || '';
+      document.getElementById('disponibilites').value = p.disponibilites || '';
+      document.getElementById('biographie').value = p.biographie || '';
+    }
+  } catch (e) {}
 
   document.getElementById('form-profil').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const payload = {
+      titre: document.getElementById('titre').value.trim(),
+      numero_accreditation: document.getElementById('numero_accreditation').value.trim(),
+      telephone: document.getElementById('telephone').value.trim(),
+      annees_experience: document.getElementById('annees_experience').value,
+      ville: document.getElementById('ville').value.trim(),
+      adresse: document.getElementById('adresse').value.trim(),
+      latitude: document.getElementById('latitude').value,
+      longitude: document.getElementById('longitude').value,
+      disponibilites: document.getElementById('disponibilites').value.trim(),
+      biographie: document.getElementById('biographie').value.trim(),
+    };
+
+    const divStatut = document.getElementById('statut-profil');
     try {
-      await api.put('/tradipraticiens/profil.php', {
-        latitude: document.getElementById('latitude').value,
-        longitude: document.getElementById('longitude').value,
-        disponibilites: document.getElementById('disponibilites').value,
-      });
-      alert('Profil mis à jour avec succès.');
+      await api.put('/tradipraticiens/profil.php', payload);
+      divStatut.style.display = 'block';
+      divStatut.style.background = 'var(--success-light)';
+      divStatut.style.color = 'var(--success)';
+      divStatut.textContent = '✓ Votre profil a été mis à jour avec succès.';
     } catch (err) {
-      alert('Erreur : ' + err.message);
-    }
-  });
-
-  // Avis reçus
-  try {
-    const avis = await api.get('/tradipraticiens/avis.php');
-    document.getElementById('liste-avis').innerHTML = avis.temoignages.map(t => `
-      <div class="bloc-remede">${'⭐'.repeat(t.note)} — ${t.contenu}</div>
-    `).join('') || '<p>Aucun avis pour le moment.</p>';
-  } catch (e) { /* ignore */ }
-
-  // ---------- Contribution : usage traditionnel par ethnie ----------
-  const selectPlante = document.getElementById('select-plante');
-  const selectEthnie = document.getElementById('select-ethnie');
-
-  try {
-    const [plantesData, ethniesData] = await Promise.all([
-      api.get('/plantes/list.php'),
-      api.get('/ethnies/list.php'),
-    ]);
-    selectPlante.innerHTML = '<option value="">-- Choisir une plante --</option>' +
-      plantesData.plantes.map(p => `<option value="${p.id_plante}">${p.nom_local} (${p.nom_scientifique || ''})</option>`).join('');
-    selectEthnie.innerHTML = '<option value="">-- Choisir une ethnie --</option>' +
-      ethniesData.ethnies.map(e => `<option value="${e.id_ethnie}">${e.nom} (${e.region})</option>`).join('');
-  } catch (e) {
-    selectPlante.innerHTML = '<option value="">Erreur de chargement</option>';
-    selectEthnie.innerHTML = '<option value="">Erreur de chargement</option>';
-  }
-
-  document.getElementById('form-contribution').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    document.getElementById('erreur-contribution').style.display = 'none';
-    document.getElementById('succes-contribution').style.display = 'none';
-
-    try {
-      await api.post('/plantes/ethnies.php', {
-        id_plante: selectPlante.value,
-        id_ethnie: selectEthnie.value,
-        usage_traditionnel: document.getElementById('texte-usage').value.trim(),
-      });
-      document.getElementById('succes-contribution').textContent = 'Merci ! Votre contribution est maintenant visible sur la fiche de la plante.';
-      document.getElementById('succes-contribution').style.display = 'block';
-      document.getElementById('form-contribution').reset();
-    } catch (err) {
-      document.getElementById('erreur-contribution').textContent = err.message;
-      document.getElementById('erreur-contribution').style.display = 'block';
+      divStatut.style.display = 'block';
+      divStatut.style.background = 'var(--danger-light)';
+      divStatut.style.color = 'var(--danger)';
+      divStatut.textContent = 'Erreur : ' + err.message;
     }
   });
 });

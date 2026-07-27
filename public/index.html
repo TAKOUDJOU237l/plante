@@ -70,7 +70,7 @@
       const plantes = data.plantes.slice(0, 6);
       grille.innerHTML = plantes.map(p => `
         <a class="carte-plante" href="plante.html?id=${p.id_plante}" style="text-decoration:none;color:inherit;">
-          <img src="${p.image_url || 'assets/images/placeholder.jpg'}" alt="${p.nom_local}">
+          <img src="${p.image_url || 'assets/images/placeholder.svg'}" alt="${p.nom_local}" onerror="this.onerror=null; this.src='assets/images/placeholder.svg';">
           <div class="contenu">
             <h3>${p.nom_local}</h3>
             <p>${p.nom_scientifique || ''}</p>

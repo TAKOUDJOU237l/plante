@@ -1,0 +1,93 @@
+-- ============================================================
+-- Correctif : renseigne image_url pour les plantes déjà en base
+-- où ce champ est resté NULL après le premier import.
+-- Sans effet si le champ est déjà rempli ou si la plante
+-- n'existe pas encore (script sûr à ré-exécuter).
+-- ============================================================
+
+USE pharmacopee_camerounaise;
+
+UPDATE PLANTE SET image_url = 'assets/images/vernonia-amygdalina.jpg' WHERE nom_scientifique = 'Vernonia amygdalina' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/prunus-africana.jpg' WHERE nom_scientifique = 'Prunus africana' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/annona-muricata.jpg' WHERE nom_scientifique = 'Annona muricata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cymbopogon-citratus.jpg' WHERE nom_scientifique = 'Cymbopogon citratus' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/persea-americana.jpg' WHERE nom_scientifique = 'Persea americana' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ocimum-gratissimum.jpg' WHERE nom_scientifique = 'Ocimum gratissimum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/enantia-chlorantha.jpg' WHERE nom_scientifique = 'Enantia chlorantha' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/annickia-chlorantha.jpg' WHERE nom_scientifique = 'Annickia chlorantha' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/morinda-lucida.jpg' WHERE nom_scientifique = 'Morinda lucida' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/alstonia-boonei.jpg' WHERE nom_scientifique = 'Alstonia boonei' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/rauvolfia-vomitoria.jpg' WHERE nom_scientifique = 'Rauvolfia vomitoria' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/picralima-nitida.jpg' WHERE nom_scientifique = 'Picralima nitida' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/mangifera-indica.jpg' WHERE nom_scientifique = 'Mangifera indica' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/aloe-vera.jpg' WHERE nom_scientifique = 'Aloe vera' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cassia-alata.jpg' WHERE nom_scientifique = 'Cassia alata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/alchornea-cordifolia.jpg' WHERE nom_scientifique = 'Alchornea cordifolia' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/citrus-limon.jpg' WHERE nom_scientifique = 'Citrus limon' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/newbouldia-laevis.jpg' WHERE nom_scientifique = 'Newbouldia laevis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/citrus-aurantiifolia.jpg' WHERE nom_scientifique = 'Citrus aurantiifolia' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/baillonella-toxisperma.jpg' WHERE nom_scientifique = 'Baillonella toxisperma' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/mammea-africana.jpg' WHERE nom_scientifique = 'Mammea africana' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/khaya-senegalensis.jpg' WHERE nom_scientifique = 'Khaya senegalensis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/terminalia-catappa.jpg' WHERE nom_scientifique = 'Terminalia catappa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/hibiscus-sabdariffa.jpg' WHERE nom_scientifique = 'Hibiscus sabdariffa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/carica-papaya.jpg' WHERE nom_scientifique = 'Carica papaya' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/psidium-guajava.jpg' WHERE nom_scientifique = 'Psidium guajava' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/zingiber-officinale.jpg' WHERE nom_scientifique = 'Zingiber officinale' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/allium-cepa.jpg' WHERE nom_scientifique = 'Allium cepa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/euphorbia-hirta.jpg' WHERE nom_scientifique = 'Euphorbia hirta' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/bidens-pilosa.jpg' WHERE nom_scientifique = 'Bidens pilosa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ageratum-conyzoides.jpg' WHERE nom_scientifique = 'Ageratum conyzoides' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/chromolaena-odorata.jpg' WHERE nom_scientifique = 'Chromolaena odorata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/combretum-micranthum.jpg' WHERE nom_scientifique = 'Combretum micranthum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/sida-acuta.jpg' WHERE nom_scientifique = 'Sida acuta' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cassia-occidentalis.jpg' WHERE nom_scientifique = 'Cassia occidentalis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/nauclea-latifolia.jpg' WHERE nom_scientifique = 'Nauclea latifolia' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/piper-guineense.jpg' WHERE nom_scientifique = 'Piper guineense' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/xylopia-aethiopica.jpg' WHERE nom_scientifique = 'Xylopia aethiopica' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/garcinia-kola.jpg' WHERE nom_scientifique = 'Garcinia kola' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cola-acuminata.jpg' WHERE nom_scientifique = 'Cola acuminata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/tetrapleura-tetraptera.jpg' WHERE nom_scientifique = 'Tetrapleura tetraptera' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/gnetum-africanum.jpg' WHERE nom_scientifique = 'Gnetum africanum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/dacryodes-edulis.jpg' WHERE nom_scientifique = 'Dacryodes edulis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/irvingia-gabonensis.jpg' WHERE nom_scientifique = 'Irvingia gabonensis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ficus-exasperata.jpg' WHERE nom_scientifique = 'Ficus exasperata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/spondias-mombin.jpg' WHERE nom_scientifique = 'Spondias mombin' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/harungana-madagascariensis.jpg' WHERE nom_scientifique = 'Harungana madagascariensis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/bridelia-ferruginea.jpg' WHERE nom_scientifique = 'Bridelia ferruginea' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/terminalia-superba.jpg' WHERE nom_scientifique = 'Terminalia superba' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ceiba-pentandra.jpg' WHERE nom_scientifique = 'Ceiba pentandra' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/elaeis-guineensis.jpg' WHERE nom_scientifique = 'Elaeis guineensis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/manihot-esculenta.jpg' WHERE nom_scientifique = 'Manihot esculenta' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/musa-paradisiaca.jpg' WHERE nom_scientifique = 'Musa paradisiaca' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ananas-comosus.jpg' WHERE nom_scientifique = 'Ananas comosus' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/citrus-sinensis.jpg' WHERE nom_scientifique = 'Citrus sinensis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cocos-nucifera.jpg' WHERE nom_scientifique = 'Cocos nucifera' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/tamarindus-indica.jpg' WHERE nom_scientifique = 'Tamarindus indica' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/sesamum-indicum.jpg' WHERE nom_scientifique = 'Sesamum indicum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/capsicum-frutescens.jpg' WHERE nom_scientifique = 'Capsicum frutescens' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/solanum-torvum.jpg' WHERE nom_scientifique = 'Solanum torvum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/vitex-doniana.jpg' WHERE nom_scientifique = 'Vitex doniana' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/piliostigma-thonningii.jpg' WHERE nom_scientifique = 'Piliostigma thonningii' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/anacardium-occidentale.jpg' WHERE nom_scientifique = 'Anacardium occidentale' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/parkia-biglobosa.jpg' WHERE nom_scientifique = 'Parkia biglobosa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/adansonia-digitata.jpg' WHERE nom_scientifique = 'Adansonia digitata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/cassia-sieberiana.jpg' WHERE nom_scientifique = 'Cassia sieberiana' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/milicia-excelsa.jpg' WHERE nom_scientifique = 'Milicia excelsa' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/khaya-grandifoliola.jpg' WHERE nom_scientifique = 'Khaya grandifoliola' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/piper-umbellatum.jpg' WHERE nom_scientifique = 'Piper umbellatum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/aframomum-melegueta.jpg' WHERE nom_scientifique = 'Aframomum melegueta' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/costus-afer.jpg' WHERE nom_scientifique = 'Costus afer' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ricinus-communis.jpg' WHERE nom_scientifique = 'Ricinus communis' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/jatropha-curcas.jpg' WHERE nom_scientifique = 'Jatropha curcas' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/justicia-secunda.jpg' WHERE nom_scientifique = 'Justicia secunda' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/talinum-triangulare.jpg' WHERE nom_scientifique = 'Talinum triangulare' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/amaranthus-hybridus.jpg' WHERE nom_scientifique = 'Amaranthus hybridus' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/corchorus-olitorius.jpg' WHERE nom_scientifique = 'Corchorus olitorius' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ipomoea-batatas.jpg' WHERE nom_scientifique = 'Ipomoea batatas' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/dioscorea-alata.jpg' WHERE nom_scientifique = 'Dioscorea alata' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/arachis-hypogaea.jpg' WHERE nom_scientifique = 'Arachis hypogaea' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/zea-mays.jpg' WHERE nom_scientifique = 'Zea mays' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/ocimum-basilicum.jpg' WHERE nom_scientifique = 'Ocimum basilicum' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/mentha-piperita.jpg' WHERE nom_scientifique = 'Mentha piperita' AND (image_url IS NULL OR image_url = '');
+UPDATE PLANTE SET image_url = 'assets/images/eucalyptus-globulus.jpg' WHERE nom_scientifique = 'Eucalyptus globulus' AND (image_url IS NULL OR image_url = '');
