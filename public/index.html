@@ -3,8 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pharmacopée Camerounaise — Accueil</title>
+<title>Pharmacopée Traditionnelle Camerounaise</title>
+<meta name="description" content="La richesse de notre patrimoine végétal au service de la santé et du bien-être.">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/header-force.css">
+<link rel="stylesheet" href="assets/css/corrections-responsive.css">
+<style>
+  .hero-accueil {
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    padding: 60px 24px;
+    overflow: hidden;
+    background-color: #0f2b17; /* couleur de secours si l'image ne charge pas */
+  }
+  .hero-accueil::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(120deg, rgba(6, 28, 12, 0.88) 0%, rgba(6, 28, 12, 0.55) 45%, rgba(6, 28, 12, 0.22) 100%),
+      url('assets/images/fond-hero-accueil.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+  .hero-accueil-contenu {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-accueil h1 {
+    color: #ffffff;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.2;
+    margin: 0 0 10px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  .hero-accueil p.sous-titre {
+    color: #e6f2e6;
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 0 28px;
+  }
+
+  .barre-recherche-accueil {
+    display: flex;
+    max-width: 560px;
+    background: #ffffff;
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+  .barre-recherche-accueil input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 15px 20px;
+    font-size: 1rem;
+  }
+  .barre-recherche-accueil button {
+    border: none;
+    background-color: #2e7d32;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0 26px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .barre-recherche-accueil button:hover { background-color: #1b5e20; }
+
+  .recherches-populaires {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .recherches-populaires span.libelle {
+    color: #d7ead7;
+    font-size: 0.85rem;
+    margin-right: 4px;
+  }
+  .tag-recherche {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+  .tag-recherche:hover { background-color: rgba(255,255,255,0.3); }
+
+  .stats-accueil {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 560px;
+    margin-top: 34px;
+  }
+  .stat-carte {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    backdrop-filter: blur(2px);
+  }
+  .stat-carte .chiffre {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-carte .libelle {
+    color: #dcefdc;
+    font-size: 0.72rem;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 700px) {
+    .stats-accueil { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---- Bandeau de confiance ---- */
+  .bandeau-confiance {
+    background: #ffffff;
+    border-bottom: 1px solid #e8e6e0;
+    padding: 22px 16px;
+  }
+  .bandeau-confiance-grille {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .item-confiance {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .item-confiance .icone { font-size: 1.3rem; flex-shrink: 0; }
+  .item-confiance h4 { margin: 0 0 2px; font-size: 0.92rem; color: #1b5e20; }
+  .item-confiance p { margin: 0; font-size: 0.8rem; color: #666; }
+  @media (max-width: 700px) {
+    .bandeau-confiance-grille { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
 </head>
 <body>
 
@@ -12,30 +164,56 @@
   <div class="logo">🌿 Pharmacopée Camerounaise</div>
   <nav>
     <a href="index.html">Accueil</a>
-    <a href="recherche.html">Rechercher</a>
+    <a href="recherche.html">Recherche</a>
     <a href="carte.html">Carte des tradipraticiens</a>
     <div id="nav-auth"></div>
   </nav>
 </header>
 
-<section class="hero">
-  <h1>Trouvez un remède traditionnel camerounais</h1>
-  <p>Décrivez vos symptômes, recherchez une plante, ou localisez un tradipraticien près de chez vous.</p>
+<!-- ================= HERO avec photo de fond ================= -->
+<section class="hero-accueil">
+  <div class="hero-accueil-contenu">
+    <h1>Rechercher<br>une <span style="color:#a5d6a7;">plante médicinale</span></h1>
+    <p class="sous-titre">La richesse de notre patrimoine végétal au service de la santé et du bien-être.</p>
 
-  <form class="barre-recherche" action="recherche.html" method="get">
-    <input type="text" name="q" placeholder="Rechercher une plante, une maladie...">
-    <button type="submit">Rechercher</button>
-  </form>
+    <div class="recherches-populaires">
+      <span class="libelle">Recherches populaires :</span>
+      <a class="tag-recherche" href="recherche.html?q=Maux+de+ventre">Maux de ventre</a>
+      <a class="tag-recherche" href="recherche.html?q=Fi%C3%A8vre">Fièvre</a>
+      <a class="tag-recherche" href="recherche.html?q=Diab%C3%A8te">Diabète</a>
+      <a class="tag-recherche" href="recherche.html?q=Hypertension">Hypertension</a>
+      <a class="tag-recherche" href="recherche.html?q=Toux">Toux</a>
+    </div>
+
+    <div class="stats-accueil" id="stats-accueil">
+      <div class="stat-carte"><div class="chiffre">–</div><div class="libelle">Plantes répertoriées</div></div>
+      <div class="stat-carte"><div class="chiffre">–</div><div class="libelle">Tradipraticiens validés</div></div>
+      <div class="stat-carte"><div class="chiffre">–</div><div class="libelle">Ethnies représentées</div></div>
+      <div class="stat-carte"><div class="chiffre">–</div><div class="libelle">Remèdes documentés</div></div>
+    </div>
+  </div>
 </section>
 
-<div class="container">
-  <h2 class="section-titre">Plantes en vedette</h2>
-  <div class="grille-plantes" id="grille-plantes-vedette">
-    <p>Chargement des plantes...</p>
+<!-- ================= Bandeau de confiance ================= -->
+<div class="bandeau-confiance">
+  <div class="bandeau-confiance-grille">
+    <div class="item-confiance">
+      <span class="icone">🛡️</span>
+      <div><h4>Fiable</h4><p>Données issues d'enquêtes ethnobotaniques sourcées</p></div>
+    </div>
+    <div class="item-confiance">
+      <span class="icone">🔒</span>
+      <div><h4>Sécurisé</h4><p>Vos données personnelles sont protégées</p></div>
+    </div>
+    <div class="item-confiance">
+      <span class="icone">🤝</span>
+      <div><h4>Collaboratif</h4><p>Enrichi par de vrais tradipraticiens validés</p></div>
+    </div>
+    <div class="item-confiance">
+      <span class="icone">🌱</span>
+      <div><h4>Durable</h4><p>Préserver aujourd'hui, bénéficier demain</p></div>
+    </div>
   </div>
-
-  <h2 class="section-titre">Localiser un tradipraticien</h2>
-  <div id="carte-interactive"></div>
 </div>
 
 <footer class="footer">
@@ -56,29 +234,19 @@
   </form>
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chatbot.js"></script>
-<script src="assets/js/carte.js"></script>
 <script>
-  // Charge quelques plantes en vedette sur la page d'accueil
   document.addEventListener('DOMContentLoaded', async () => {
-    const grille = document.getElementById('grille-plantes-vedette');
+    // Statistiques réelles (endpoint public, sans authentification)
     try {
-      const data = await api.get('/plantes/list.php');
-      const plantes = data.plantes.slice(0, 6);
-      grille.innerHTML = plantes.map(p => `
-        <a class="carte-plante" href="plante.html?id=${p.id_plante}" style="text-decoration:none;color:inherit;">
-          <img src="${p.image_url || 'assets/images/placeholder.svg'}" alt="${p.nom_local}" onerror="this.onerror=null; this.src='assets/images/placeholder.svg';">
-          <div class="contenu">
-            <h3>${p.nom_local}</h3>
-            <p>${p.nom_scientifique || ''}</p>
-          </div>
-        </a>
-      `).join('') || '<p>Aucune plante disponible pour le moment.</p>';
+      const data = await api.get('/stats/public.php');
+      const s = data.stats;
+      const cartes = document.querySelectorAll('#stats-accueil .stat-carte .chiffre');
+      const valeurs = [s.total_plantes, s.total_tradipraticiens, s.total_ethnies, s.total_remedes];
+      cartes.forEach((el, i) => { el.textContent = valeurs[i] + '+'; });
     } catch (e) {
-      grille.innerHTML = '<p>Impossible de charger les plantes pour le moment.</p>';
+      // en cas d'erreur, on laisse le tiret par défaut plutôt qu'un faux chiffre
     }
   });
 </script>

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recherche — Pharmacopée Camerounaise</title>
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/header-force.css">
+<link rel="stylesheet" href="assets/css/corrections-responsive.css">
 </head>
 <body>
 
@@ -20,6 +22,7 @@
 
 <div class="container">
   <h2 class="section-titre">Résultats de recherche</h2>
+  <p id="compteur-plantes" class="compteur-plantes">Chargement du nombre de plantes...</p>
 
   <form class="barre-recherche" id="form-recherche" style="max-width:100%;">
     <input type="text" id="champ-recherche" placeholder="Nom de plante, maladie...">
@@ -56,6 +59,8 @@
 <script src="assets/js/chatbot.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+  chargerCompteurPlantes();
+
   const grille = document.getElementById('grille-resultats');
   const champRecherche = document.getElementById('champ-recherche');
   const selectEthnie = document.getElementById('filtre-ethnie');
@@ -107,6 +112,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   lancerRecherche();
 });
+
+async function chargerCompteurPlantes() {
+  const compteur = document.getElementById('compteur-plantes');
+  try {
+    const data = await api.get('/plantes/list.php'); // sans filtre = toutes les plantes
+    const total = data.total ?? data.plantes.length;
+    compteur.textContent = `🌿 ${total} plante${total > 1 ? 's' : ''} recensée${total > 1 ? 's' : ''} dans la base`;
+  } catch (e) {
+    compteur.textContent = '';
+  }
+}
 </script>
 </body>
 </html>

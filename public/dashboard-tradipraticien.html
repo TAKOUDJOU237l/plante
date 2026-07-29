@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Tradipraticien — Pharmacopée Camerounaise</title>
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/header-force.css">
+<link rel="stylesheet" href="assets/css/corrections-responsive.css">
 </head>
 <body>
 
@@ -27,8 +29,8 @@
     <form id="form-profil" style="display: flex; flex-direction: column; gap: 16px;">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
-          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Titre professionnel</label>
-          <input type="text" id="titre" placeholder="ex : Dr. Phytothérapeute agréé" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">titre</label>
+          <input type="text" id="nom" placeholder="votre nom complet" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;" required>
         </div>
         <div>
           <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Numéro d'accréditation MINSANTE / ANTRASA</label>
@@ -39,11 +41,11 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div>
           <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Téléphone direct</label>
-          <input type="text" id="telephone" placeholder="ex : +237 677 12 34 56" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+          <input type="text" id="telephone" placeholder="ex : +237 677 12 34 56" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; " required>
         </div>
         <div>
           <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Années d'expérience</label>
-          <input type="number" id="annees_experience" placeholder="ex : 20" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+          <input type="number" id="annees_experience" placeholder="ex : 20" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;" required>
         </div>
       </div>
 
@@ -54,7 +56,7 @@
         </div>
         <div>
           <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Adresse / Quartier</label>
-          <input type="text" id="adresse" placeholder="ex : Quartier Etoudi, face Stade" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;">
+          <input type="text" id="adresse" placeholder="ex : Quartier Etoudi, face Stade" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none;" required>
         </div>
       </div>
 
@@ -81,7 +83,7 @@
 
       <div id="statut-profil" style="display:none; padding: 10px; border-radius: 6px; font-size: 0.9rem;"></div>
 
-      <button type="submit" style="align-self: flex-start; background: var(--primary-700); color: white; border: none; padding: 12px 28px; border-radius: var(--radius-full); font-family: var(--font-heading); font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm);">
+      <button type="submit" style="align-self: flex-start; background:white; color: rgb(21, 122, 28); border: 3px solid rgb(21, 122, 28); padding: 12px 28px; border-radius:8px; font-family: var(--font-heading); font-weight: 600; cursor: pointer; box-shadow: var(--shadow-sm);">
         💾 Enregistrer les modifications
       </button>
     </form>
@@ -100,12 +102,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const utilisateur = await requireRole(['tradipraticien']);
   if (!utilisateur) return;
 
-  // Charge le profil
+  // Pré-remplit le nom depuis le compte connecté (table UTILISATEUR),
+  // au cas où le profil tradipraticien n'aurait pas encore été enregistré.
+  if (utilisateur.nom) {
+    document.getElementById('nom').value = utilisateur.nom;
+  }
+
+  // Charge le profil existant (table TRADIPRATICIEN)
   try {
     const data = await api.get('/tradipraticiens/profil.php');
     if (data.profil) {
       const p = data.profil;
-      document.getElementById('titre').value = p.titre || '';
+      if (p.nom) document.getElementById('nom').value = p.nom;
       document.getElementById('numero_accreditation').value = p.numero_accreditation || '';
       document.getElementById('telephone').value = p.telephone || '';
       document.getElementById('annees_experience').value = p.annees_experience || '';
@@ -116,31 +124,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('disponibilites').value = p.disponibilites || '';
       document.getElementById('biographie').value = p.biographie || '';
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn('Chargement du profil impossible (peut-être pas encore créé) :', e);
+  }
 
   document.getElementById('form-profil').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const payload = {
-      titre: document.getElementById('titre').value.trim(),
-      numero_accreditation: document.getElementById('numero_accreditation').value.trim(),
-      telephone: document.getElementById('telephone').value.trim(),
-      annees_experience: document.getElementById('annees_experience').value,
-      ville: document.getElementById('ville').value.trim(),
-      adresse: document.getElementById('adresse').value.trim(),
-      latitude: document.getElementById('latitude').value,
-      longitude: document.getElementById('longitude').value,
-      disponibilites: document.getElementById('disponibilites').value.trim(),
-      biographie: document.getElementById('biographie').value.trim(),
-    };
 
     const divStatut = document.getElementById('statut-profil');
+
     try {
+      const payload = {
+        nom: document.getElementById('nom').value.trim(),
+        numero_accreditation: document.getElementById('numero_accreditation').value.trim(),
+        telephone: document.getElementById('telephone').value.trim(),
+        annees_experience: document.getElementById('annees_experience').value,
+        ville: document.getElementById('ville').value.trim(),
+        adresse: document.getElementById('adresse').value.trim(),
+        latitude: document.getElementById('latitude').value,
+        longitude: document.getElementById('longitude').value,
+        disponibilites: document.getElementById('disponibilites').value.trim(),
+        biographie: document.getElementById('biographie').value.trim(),
+      };
+
       await api.put('/tradipraticiens/profil.php', payload);
+
       divStatut.style.display = 'block';
       divStatut.style.background = 'var(--success-light)';
       divStatut.style.color = 'var(--success)';
       divStatut.textContent = '✓ Votre profil a été mis à jour avec succès.';
     } catch (err) {
+      console.error('Erreur lors de l\'enregistrement du profil :', err);
       divStatut.style.display = 'block';
       divStatut.style.background = 'var(--danger-light)';
       divStatut.style.color = 'var(--danger)';

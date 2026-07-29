@@ -1,0 +1,98 @@
+/* corrections-responsive.css
+   À charger APRÈS style.css (et header-force.css) dans le <head> de chaque page.
+   Corrige les problèmes d'affichage courants sur mobile/tablette. */
+
+/* Base : évite le débordement horizontal et assure un texte lisible sans zoom */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* Toutes les images/vidéos s'adaptent à leur conteneur, ne débordent jamais */
+img, video, svg, canvas {
+  max-width: 100% !important;
+  height: auto;
+}
+
+/* Conteneur principal : marge réduite sur petit écran */
+.container {
+  width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* Grilles de cartes (plantes, tradipraticiens...) : passent en colonnes uniques
+   sur mobile au lieu de rester compressées */
+@media (max-width: 640px) {
+  .grille-plantes,
+  .liste-tradipraticiens {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fiche-plante {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-grille {
+    grid-template-columns: 1fr !important;
+  }
+
+  .filtres {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .filtres select, .filtres input {
+    width: 100% !important;
+  }
+}
+
+/* Tableaux larges (dashboard admin) : scroll horizontal au lieu de débordement */
+table.tableau-donnees {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Formulaires en carte (login/register) : marge latérale sur petit écran */
+@media (max-width: 480px) {
+  .form-carte {
+    margin: 24px 12px !important;
+    padding: 22px !important;
+  }
+}
+
+/* Barre de recherche : empile input + bouton sur très petit écran si besoin */
+@media (max-width: 420px) {
+  .barre-recherche,
+  .barre-recherche-accueil {
+    flex-wrap: wrap;
+  }
+  .barre-recherche input,
+  .barre-recherche-accueil input {
+    width: 100%;
+  }
+  .barre-recherche button,
+  .barre-recherche-accueil button {
+    width: 100%;
+    padding: 12px !important;
+  }
+}
+
+/* Chatbot flottant : ne dépasse pas de l'écran sur mobile */
+@media (max-width: 480px) {
+  .chatbot-fenetre {
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+  }
+  .chatbot-bulle {
+    right: 16px !important;
+  }
+}

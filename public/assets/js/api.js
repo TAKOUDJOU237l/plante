@@ -3,11 +3,11 @@
  * Toutes les pages du frontend passent par ces fonctions.
  */
 
-const API_BASE = '/pharmacopee-platform/api'; // adapter si le projet est servi depuis un sous-dossier
+const API_BASE = '/pharmacopee-platform/api';
 
 async function apiRequest(endpoint, options = {}) {
   const response = await fetch(API_BASE + endpoint, {
-    credentials: 'include', // envoie le cookie de session PHP
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     ...options,
   });
@@ -33,8 +33,9 @@ const api = {
 };
 
 /**
- * Met à jour la barre de navigation selon l'état de connexion
- * (appelé sur chaque page via un <div id="nav-auth">).
+ * Met à jour la barre de navigation selon l'état de connexion.
+ * "Inscription" (déconnecté) et "Mon espace" (connecté) portent la classe
+ * "primaire" pour être affichés comme le bouton d'action principal (pill vert).
  */
 async function chargerEtatConnexion() {
   const zone = document.getElementById('nav-auth');
@@ -48,8 +49,8 @@ async function chargerEtatConnexion() {
         data.utilisateur.role === 'tradipraticien' ? 'dashboard-tradipraticien.html' : null;
 
       zone.innerHTML = `
-        <span style="margin-right:8px;">Bonjour, ${data.utilisateur.nom}</span>
-        ${lienDashboard ? `<a href="${lienDashboard}">Mon espace</a>` : ''}
+        <span style="margin-right:4px;color:#374151;font-size:0.9rem;">Bonjour, ${data.utilisateur.nom}</span>
+        ${lienDashboard ? `<a href="${lienDashboard}" class="primaire">Mon espace</a>` : ''}
         <button id="btn-deconnexion">Déconnexion</button>
       `;
       document.getElementById('btn-deconnexion').addEventListener('click', async () => {
